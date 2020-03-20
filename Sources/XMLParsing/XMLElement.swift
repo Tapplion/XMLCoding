@@ -353,16 +353,20 @@ open class XMLElement {
         for child in children {
             let childName = child.name
             
-            if let value = child.value {
-                result[childName] = value
-            } else if !child.children.isEmpty {
-                let childValues = child.children.compactMap{$0.value}
-                if childValues.count > 0 {
-                    result[childName] = childValues
-                } else {
-                    let flattenedChildren = child.children.map{ $0.flattened }
+            if !child.children.isEmpty {
+                let childValues = child.children.compactMap{ $0.value }
+                let flattenedChildren = child.children.compactMap{ $0.flattened }
+                let hasFullChildren = !flattenedChildren.flatMap{ $0 }.isEmpty
+                
+                if hasFullChildren {
                     result[childName] = flattenedChildren
+                } else {
+                    if childValues.count > 0 {
+                        result[childName] = childValues
+                    }
                 }
+            } else if let value = child.value {
+                result[childName] = value
             } else {
                 result[childName] = nil
             }

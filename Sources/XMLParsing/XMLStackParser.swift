@@ -65,9 +65,6 @@ extension XMLStackParser: XMLParserDelegate {
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         currentValue.append(string)
-        if currentValue.contains("\n") {
-            currentValue = ""
-        }
         currentElement?.value = currentValue.isEmpty ? nil : currentValue
     }
     
